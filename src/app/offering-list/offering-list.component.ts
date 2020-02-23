@@ -4,8 +4,8 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {OfferingService} from '../shared/offering.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
-import {OfferingDataSource} from '../shared/offering-data-source';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-offering-list',
@@ -56,5 +56,13 @@ export class OfferingListComponent implements OnInit, OnDestroy {
     if (this.dataSource) {
       this.dataSource.disconnect();
     }
+  }
+
+  getSrcImg(offering: Offering): string {
+    return `/assets/items/${offering.img.split('/').pop()}`;
+  }
+
+  formatDate(date: Date): string {
+    return moment(date, 'DD/MM/YYYY').locale('fr').format('D MMM');
   }
 }

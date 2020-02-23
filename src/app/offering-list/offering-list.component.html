@@ -6,7 +6,7 @@
 <mat-list>
   <div *ngFor="let offering of offerings$ | async">
     <mat-list-item>
-      <img matListAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg">
+      <img matListAvatar src="" [src]="getSrcImg(offering)" onerror="this.src='/assets/items/18001.png'">
       <h3 matLine> {{offering.bonus}} </h3>
       <p matLine>
         {{offering.quantity}}
@@ -14,10 +14,10 @@
         {{offering.offering}}
       </p>
       <p matLine>{{offering.description}}</p>
-      <div>{{offering.date}}</div>
+      <div class="date">{{formatDate(offering.date)}}</div>
     </mat-list-item>
     <mat-divider></mat-divider>
   </div>
 </mat-list>
 
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+<mat-paginator [pageSizeOptions]="[10, 5, 15, 100]"></mat-paginator>

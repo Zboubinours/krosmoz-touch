@@ -39,7 +39,7 @@ export class OfferingService {
     console.log('not empty');
     return this.getOfferings().pipe(
       map(offerings => offerings.filter((offering: Offering) => {
-        return Object.values(offering).map(x => x.toString()).join('').trim().toLowerCase().includes(term);
+        return Object.values(offering).map(x => x == null ? '' : x.toString()).join('').trim().toLowerCase().includes(term);
       }))
     );
   }
