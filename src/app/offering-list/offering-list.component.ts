@@ -1,36 +1,60 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Offering} from '../shared/offering';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {OfferingService} from '../shared/offering.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
+import {OfferingDataSource} from '../shared/offering-data-source';
+import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-offering-list',
   templateUrl: './offering-list.component.html',
   styleUrls: ['./offering-list.component.css']
 })
-export class OfferingListComponent implements OnInit {
-
-  columnsToDisplay = ['date', 'bonus', 'quantity', 'offering', 'description'];
-  dataSource: MatTableDataSource<unknown>;
+export class OfferingListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  offerings$: Observable<Offering[]>;
+  dataSource: MatTableDataSource<Offering> = new MatTableDataSource<Offering>([]);
+  private searchTerms = new BehaviorSubject<string>('');
 
-  constructor(private offeringService: OfferingService) {
+  constructor(
+    private offeringService: OfferingService,
+    private changeDetectorRef: ChangeDetectorRef) {
   }
+
 
   ngOnInit(): void {
-    this.offeringService.getOfferings().subscribe(offerings => {
-      this.dataSource = new MatTableDataSource(offerings);
-      this.dataSource.paginator = this.paginator;
-    });
+    this.changeDetectorRef.detectChanges();
+    this.dataSource.paginator = this.paginator;
+    this.offerings$ = this.dataSource.connect();
+    this.searchTerms.pipe(
+      // wait 300ms after each keystroke before considering the term
+      debounceTime(300),
+
+      // ignore new term if same as previous term
+      distinctUntilChanged(),
+
+      // switch to new search observable each time the term changes
+      switchMap((term: string) => this.offeringService.searchOfferings(term)),
+    )
+      .subscribe(value => this.dataSource.data = value);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  // Push a search term into the observable stream.
+  search(term: string): void {
+    this.searchTerms.next(term);
   }
 
 
+  // }
+
+
+  ngOnDestroy() {
+    if (this.dataSource) {
+      this.dataSource.disconnect();
+    }
+  }
 }

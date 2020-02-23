@@ -4,4 +4,5 @@ export class Offering {
   quantity: number;
   offering: string;
   description: string;
+  img: string;
 }

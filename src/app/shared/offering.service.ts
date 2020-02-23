@@ -17,11 +17,30 @@ export class OfferingService {
     return this.http.get<Offering[]>('./assets/krosmoz.json')
       .pipe(
         tap(value => console.log(value)),
-        map(offerings => offerings.filter((offering: Offering) => {
-          const now = moment().subtract(1, 'day');
-          const date = moment(offering.date, 'DD/MM/YYYY');
-          return date.isAfter(now);
-        }))
+        map(offerings => offerings
+          .filter((offering: Offering) => {
+              const now = moment().subtract(1, 'day');
+              const date = moment(offering.date, 'DD/MM/YYYY');
+              return date.isAfter(now);
+            }
+          )
+        )
       );
+  }
+
+  public searchOfferings(term: string): Observable<Offering[]> {
+    term = term && term.trim().toLowerCase();
+    console.log(term);
+    if (!term) {
+      console.log('empty');
+      // if not search term, return empty hero array.
+      return this.getOfferings();
+    }
+    console.log('not empty');
+    return this.getOfferings().pipe(
+      map(offerings => offerings.filter((offering: Offering) => {
+        return Object.values(offering).map(x => x.toString()).join('').trim().toLowerCase().includes(term);
+      }))
+    );
   }
 }

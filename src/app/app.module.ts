@@ -10,6 +10,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
+import {MatIconModule} from '@angular/material/icon';
 
 
 
@@ -23,11 +26,15 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatTableModule,
-    MatPaginatorModule,
+    // MatTableModule,
+    // MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
