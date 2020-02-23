@@ -59,6 +59,9 @@ export class OfferingListComponent implements OnInit, OnDestroy {
   }
 
   getSrcImg(offering: Offering): string {
+    if (offering.img == null) {
+      return null;
+    }
     return `/assets/items/${offering.img.split('/').pop()}`;
   }
 
