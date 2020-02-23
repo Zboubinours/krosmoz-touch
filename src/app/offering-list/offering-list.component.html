@@ -1,23 +1,28 @@
-<mat-form-field class="mt-2 mb-1">
+<mat-form-field>
   <mat-label>Rechercher un bonus d'almanax</mat-label>
   <input matInput #searchBar (keyup)="search(searchBar.value)" placeholder="Par exemple bijoutier">
 </mat-form-field>
 
-<mat-list>
-  <div *ngFor="let offering of offerings$ | async">
-    <mat-list-item>
-      <img matListAvatar src="" [src]="getSrcImg(offering)" onerror="this.src='/assets/items/18001.png'">
-      <h3 matLine> {{offering.bonus}} </h3>
-      <p matLine>
-        {{offering.quantity}}
-        &mdash;
-        {{offering.offering}}
-      </p>
-      <p matLine>{{offering.description}}</p>
-      <div class="date">{{formatDate(offering.date)}}</div>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-  </div>
-</mat-list>
+<div *ngFor="let offering of offerings$ | async">
+  <mat-card class="my-1">
+
+    <mat-card-header>
+      <img mat-card-avatar [src]="getSrcImg(offering)" onerror="this.src='/assets/items/18001.png'">
+
+      <mat-card-title>{{offering.bonus}}</mat-card-title>
+
+      <mat-card-subtitle>
+        <span class="date">{{formatDate(offering.date)}}</span> &mdash; {{offering.quantity}} {{offering.offering}}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>{{offering.description}}</p>
+    </mat-card-content>
+
+  </mat-card>
+
+  <mat-divider></mat-divider>
+</div>
 
 <mat-paginator [pageSizeOptions]="[10, 5, 15, 100]"></mat-paginator>

@@ -4,4 +4,8 @@
 
 .date {
   white-space: nowrap;
+  font-weight: 550;
+}
+mat-card {
+  box-shadow: unset !important;
 }
