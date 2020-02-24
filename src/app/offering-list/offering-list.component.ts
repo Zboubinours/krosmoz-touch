@@ -17,7 +17,6 @@ export class OfferingListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   offerings$: Observable<Offering[]>;
   dataSource: MatTableDataSource<Offering> = new MatTableDataSource<Offering>([]);
-  private searchTerms = new BehaviorSubject<string>('');
 
   constructor(
     private offeringService: OfferingService,
@@ -29,27 +28,15 @@ export class OfferingListComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges();
     this.dataSource.paginator = this.paginator;
     this.offerings$ = this.dataSource.connect();
-    this.searchTerms.pipe(
-      // wait 300ms after each keystroke before considering the term
-      debounceTime(300),
-
-      // ignore new term if same as previous term
-      distinctUntilChanged(),
-
-      // switch to new search observable each time the term changes
-      switchMap((term: string) => this.offeringService.searchOfferings(term)),
-    )
+    this.offeringService.offerings
       .subscribe(value => this.dataSource.data = value);
   }
 
 
   // Push a search term into the observable stream.
   search(term: string): void {
-    this.searchTerms.next(term);
+    this.offeringService.searchOfferings(term);
   }
-
-
-  // }
 
 
   ngOnDestroy() {

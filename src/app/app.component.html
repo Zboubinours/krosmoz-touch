@@ -1,15 +1,31 @@
-<mat-toolbar color="primary">
-  <span>
-    <img src="./assets/logo.png" class="logo"/>
-    Krosmoz
-  </span>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <a mat-list-item>XP</a>
+      <a mat-list-item>Butin</a>
+      <a mat-list-item>Économie d'ingrédients</a>
+      <a mat-list-item>XP métiers</a>
+      <a mat-list-item>Dragodindes</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
 
-  <!-- This fills the remaining space of the current row -->
-  <span class="example-fill-remaining-space"></span>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button mat-icon-button>
+          <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+        </button>
+        <img src="/assets/logo.png" class="logo"/>
+        <h1>
+          Krosmoz
+        </h1>
+        <span class="example-fill-remaining-space"></span>
+        <span class="author">par zboubinours ❤</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="container">
+      <app-offering-list></app-offering-list>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-  <span class="author">par zboubinours ❤</span>
-</mat-toolbar>
-
-<div class="container">
-  <app-offering-list></app-offering-list>
-</div>

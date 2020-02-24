@@ -5,10 +5,16 @@
 }
 
 .logo {
-  height: 30px;
+  height: 25px;
 }
 
 .author {
   font-size: 0.5em;
   font-style: italic;
 }
+
+mat-sidenav-container {
+  background-color: unset;
+}
+
+

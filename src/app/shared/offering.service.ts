@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Offering} from './offering';
-import {map, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Injectable({
@@ -10,7 +10,21 @@ import * as moment from 'moment';
 })
 export class OfferingService {
 
+  public searchTerms = new BehaviorSubject<string>('');
+  public offerings = new BehaviorSubject<Offering[]>([]);
+
   constructor(private http: HttpClient) {
+    this.searchTerms.pipe(
+      // wait 300ms after each keystroke before considering the term
+      debounceTime(300),
+
+      // ignore new term if same as previous term
+      distinctUntilChanged(),
+
+      // switch to new search observable each time the term changes
+      switchMap((term: string) => this.applySearch(term)),
+    )
+      .subscribe(value => this.offerings.next(value));
   }
 
   public getOfferings(): Observable<Offering[]> {
@@ -28,15 +42,16 @@ export class OfferingService {
       );
   }
 
-  public searchOfferings(term: string): Observable<Offering[]> {
+  public searchOfferings(term: string): void {
+    this.searchTerms.next(term);
+  }
+
+  private applySearch(term: string): Observable<Offering[]> {
     term = term && term.trim().toLowerCase();
-    console.log(term);
     if (!term) {
-      console.log('empty');
       // if not search term, return empty hero array.
       return this.getOfferings();
     }
-    console.log('not empty');
     return this.getOfferings().pipe(
       map(offerings => offerings.filter((offering: Offering) => {
         return Object.values(offering).map(x => x == null ? '' : x.toString()).join('').trim().toLowerCase().includes(term);
