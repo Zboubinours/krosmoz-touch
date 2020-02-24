@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "krosmoz"
+  "defaultProject": "krosmoz",
+  "cli": {
+    "analytics": false
+  }
 }
