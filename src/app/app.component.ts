@@ -11,10 +11,11 @@ export class AppComponent {
   title = 'krosmoz';
 
   filters: Filter[] = [
-    {name: 'XP', search: 'expérience'},
-    {name: 'Drop', search: 'butin'},
+    {name: 'XP', search: 'd\'expérience+challenge+étoiles'},
+    {name: 'Drop', search: 'butin+étoiles'},
     {name: 'Économie d\'ingrédients', search: 'économie'},
-    {name: 'Dragodindes', search: 'dragodindes'},
+    {name: 'Dragodindes', search: 'élevage'},
+    {name: 'Récolte', search: 'abondant'},
   ];
 
   constructor(private offeringService: OfferingService) {

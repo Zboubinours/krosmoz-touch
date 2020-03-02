@@ -30,7 +30,7 @@ export class OfferingService {
   public getOfferings(): Observable<Offering[]> {
     return this.http.get<Offering[]>('./assets/krosmoz.json')
       .pipe(
-        tap(value => console.log(value)),
+        // tap(value => console.log(value)),
         map(offerings => offerings
           .filter((offering: Offering) => {
               const now = moment().subtract(1, 'day');
@@ -52,9 +52,7 @@ export class OfferingService {
       // if not search term, return empty hero array.
       return this.getOfferings();
     }
-    console.log(term)
     const terms: string[] = term.split('+').map(x => x.trim());
-    console.log(terms)
     return this.getOfferings().pipe(
       map(offerings => offerings.filter((offering: Offering) => {
         const offeringStr: string = Object.values(offering).map(x => x == null ? '' : x.toString()).join('').trim().toLowerCase();
