@@ -52,9 +52,13 @@ export class OfferingService {
       // if not search term, return empty hero array.
       return this.getOfferings();
     }
+    console.log(term)
+    const terms: string[] = term.split('+').map(x => x.trim());
+    console.log(terms)
     return this.getOfferings().pipe(
       map(offerings => offerings.filter((offering: Offering) => {
-        return Object.values(offering).map(x => x == null ? '' : x.toString()).join('').trim().toLowerCase().includes(term);
+        const offeringStr: string = Object.values(offering).map(x => x == null ? '' : x.toString()).join('').trim().toLowerCase();
+        return terms.some(s => offeringStr.includes(s));
       }))
     );
   }
